@@ -11,7 +11,7 @@ import com.VictorBarbosa.Projeto_Vendas.entities.User;
 @RequestMapping(value = "/users")
 public class UserRecurso {
 
-	@GetMapping
+	@GetMapping  //Apenas para teste
 	public ResponseEntity<User> RetorneTodos(){
 		User u = new User(1L, "Maria", "Maria@gmail.com", "9999999999", "12345");
 		return ResponseEntity.ok().body(u);
