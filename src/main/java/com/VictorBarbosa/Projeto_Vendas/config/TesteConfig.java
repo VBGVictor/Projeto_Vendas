@@ -2,15 +2,18 @@ package com.VictorBarbosa.Projeto_Vendas.config;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Locale.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.VictorBarbosa.Projeto_Vendas.entities.Categoria;
 import com.VictorBarbosa.Projeto_Vendas.entities.Pedido;
 import com.VictorBarbosa.Projeto_Vendas.entities.User;
 import com.VictorBarbosa.Projeto_Vendas.entities.enums.StatusPedido;
+import com.VictorBarbosa.Projeto_Vendas.repositorios.CategoriaRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.PedidoRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.UserRepositorio;
 
@@ -24,11 +27,18 @@ public class TesteConfig implements CommandLineRunner {
 	@Autowired
 	private PedidoRepositorio pedidoRepositorio;
 	
+	@Autowired
+	private CategoriaRepositorio categoriaRepositorio;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
 		User u1 = new User(null, "Maria Silva", "MariaSilva@gmail.com", "988888888", "123456");
 		User u2 = new User(null, "Antonio Marcos", "AntonioMarcos@gmail.com", "977777777", "123456");
+		
+		Categoria cat1 = new Categoria(null, "Eletrônicos");
+		Categoria cat2 = new Categoria(null, "Livros");
+		Categoria cat3 = new Categoria(null, "Computadores");
 		
 		Pedido p1 = new Pedido(null, Instant.parse("2022-05-17T23:23:30Z"), StatusPedido.PAGO, u1);//no Brasil é 3 horas atrasado do que no formato UTC
 		Pedido p2 = new Pedido(null, Instant.parse("2022-05-18T12:23:30Z"), StatusPedido.ESPERANDO_PAGAMENTO, u2);
@@ -36,6 +46,7 @@ public class TesteConfig implements CommandLineRunner {
 		
 		userRepositorio.saveAll(Arrays.asList(u1, u2));
 		pedidoRepositorio.saveAll(Arrays.asList(p1, p2, p3));
+		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3));
 	}
 	
 }
