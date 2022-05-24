@@ -2,7 +2,6 @@ package com.VictorBarbosa.Projeto_Vendas.config;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Locale.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.Categoria;
 import com.VictorBarbosa.Projeto_Vendas.entities.Pedido;
+import com.VictorBarbosa.Projeto_Vendas.entities.Produto;
 import com.VictorBarbosa.Projeto_Vendas.entities.User;
 import com.VictorBarbosa.Projeto_Vendas.entities.enums.StatusPedido;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.CategoriaRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.PedidoRepositorio;
+import com.VictorBarbosa.Projeto_Vendas.repositorios.ProdutoRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.UserRepositorio;
 
 @Configuration
@@ -30,6 +31,9 @@ public class TesteConfig implements CommandLineRunner {
 	@Autowired
 	private CategoriaRepositorio categoriaRepositorio;
 	
+	@Autowired
+	private ProdutoRepositorio produtoRepositorio;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
@@ -40,13 +44,29 @@ public class TesteConfig implements CommandLineRunner {
 		Categoria cat2 = new Categoria(null, "Livros");
 		Categoria cat3 = new Categoria(null, "Computadores");
 		
-		Pedido p1 = new Pedido(null, Instant.parse("2022-05-17T23:23:30Z"), StatusPedido.PAGO, u1);//no Brasil é 3 horas atrasado do que no formato UTC
-		Pedido p2 = new Pedido(null, Instant.parse("2022-05-18T12:23:30Z"), StatusPedido.ESPERANDO_PAGAMENTO, u2);
-		Pedido p3 = new Pedido(null, Instant.parse("2022-05-19T14:53:30Z"), StatusPedido.ESPERANDO_PAGAMENTO, u1);
+		Produto p1 = new Produto(null, "The Lord of the Rings", "Lorem ipsum dolor sit amet, consectetur.", 90.5, "");
+		Produto p2 = new Produto(null, "Smart TV", "Nulla eu imperdiet purus. Maecenas ante.", 2190.0, "");
+		Produto p3 = new Produto(null, "Macbook Pro", "Nam eleifend maximus tortor, at mollis.", 1250.0, "");
+		Produto p4 = new Produto(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
+		Produto p5 = new Produto(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
+		
+		Pedido pe1 = new Pedido(null, Instant.parse("2022-05-17T23:23:30Z"), StatusPedido.PAGO, u1);//no Brasil é 3 horas atrasado do que no formato UTC
+		Pedido pe2 = new Pedido(null, Instant.parse("2022-05-18T12:23:30Z"), StatusPedido.ESPERANDO_PAGAMENTO, u2);
+		Pedido pe3 = new Pedido(null, Instant.parse("2022-05-19T14:53:30Z"), StatusPedido.ESPERANDO_PAGAMENTO, u1);
 		
 		userRepositorio.saveAll(Arrays.asList(u1, u2));
-		pedidoRepositorio.saveAll(Arrays.asList(p1, p2, p3));
+		pedidoRepositorio.saveAll(Arrays.asList(pe1, pe2, pe3));
 		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3));
+		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		
+		p1.getCategorias().add(cat2);
+		p2.getCategorias().add(cat1);
+		p2.getCategorias().add(cat3);
+		p3.getCategorias().add(cat3);
+		p4.getCategorias().add(cat3);
+		p5.getCategorias().add(cat2);
+		
+		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 	}
 	
 }

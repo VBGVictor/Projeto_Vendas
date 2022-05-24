@@ -1,13 +1,22 @@
 package com.VictorBarbosa.Projeto_Vendas.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 
 @Entity
 @Table(name = "tb_categoria")
@@ -18,6 +27,14 @@ public class Categoria implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
+	
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY,
+				cascade = {
+						CascadeType.PERSIST,
+						CascadeType.MERGE},
+						mappedBy = "categorias")
+	private Set<Produto> produtos = new HashSet<>();
 	
 	public Categoria() {
 	}
@@ -43,11 +60,16 @@ public class Categoria implements Serializable {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	public Set<Produto> getProdutos() {
+		return produtos;
+	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, nome);
 	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -60,6 +82,5 @@ public class Categoria implements Serializable {
 		Categoria other = (Categoria) obj;
 		return Objects.equals(id, other.id) && Objects.equals(nome, other.nome);
 	}
-	
 	
 }
