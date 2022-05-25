@@ -2,14 +2,19 @@ package com.VictorBarbosa.Projeto_Vendas.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.enums.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -28,13 +33,17 @@ public class Pedido implements Serializable {
 	
 	private Integer statusPedido;
 
-	// @JsonIgnore //Esta anotação irá impedir o lop infinito causado pela ligação
-	// da lista com os pedidos
-	// Tambem serve para definir quem carregará os dados ligados entre si
-	@ManyToOne // Muitos para um
+	                                                               // @JsonIgnore //Esta anotação irá impedir o lop infinito causado pela ligação
+	                                                                              // da lista com os pedidos
+	                                                                              // Tambem serve para definir quem carregará os dados ligados entre si
+	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	private User cliente;
 
+	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER, mappedBy = "id.pedido")  //Este mapeamento não estava conseguindo relacionar com o 'id.pedidos' da classe
+	private Set<PedidoItem> Items = new HashSet<>();                                       //PeidoItemPK que se trata de uma classe que intermedia a relação, logo, tive que colocar
+																						   //O comando 'EAGER' e 'CascadeType.ALL' para forçar e puxar a relação
+	
 	public Pedido() {
 	}
 
@@ -70,6 +79,9 @@ public class Pedido implements Serializable {
 		this.cliente = cliente;
 	}
 
+	public Set<PedidoItem> getItems() {
+		return Items;
+	}
 	
 	
 	public StatusPedido getStatusPedido() {

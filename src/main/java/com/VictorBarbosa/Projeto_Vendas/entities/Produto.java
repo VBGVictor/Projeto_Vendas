@@ -16,8 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name = "tb_produtos")
 public class Produto implements Serializable {
@@ -30,15 +28,13 @@ public class Produto implements Serializable {
 	private String descricao;
 	private Double preco;
 	private String imgUrl;
-	// Set é uma interface e não pode ser instanciado, então usamos a classe
-	// correspondente a esta interface (HasdSet).
-	// O Set representa um conjunto, pois, garantirá que não terá um produto com
-	// mais de uma ocorrencia de categoria.
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY,
-			cascade = {
-					CascadeType.PERSIST,
-					CascadeType.MERGE})
+	                                                                         // Set é uma interface e não pode ser instanciado, então usamos a classe
+	                                                                         // correspondente a esta interface (HasdSet).
+	                                                                         // O Set representa um conjunto, pois, garantirá que não terá um produto com
+	                                                                         // mais de uma ocorrencia de categoria.
+	
+	@ManyToMany(fetch = FetchType.EAGER,
+			cascade = {CascadeType.ALL})
 	@JoinTable(name = "tb_produto_categoria", joinColumns = {@JoinColumn(name = "produto_id")}, inverseJoinColumns = {@JoinColumn(name = "categoria_id")})
 	private Set<Categoria> categorias = new HashSet<>();// Para garantir que a coleção não comece valendo null
 

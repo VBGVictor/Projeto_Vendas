@@ -14,9 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 
 @Entity
 @Table(name = "tb_categoria")
@@ -28,12 +26,10 @@ public class Categoria implements Serializable {
 	private Long id;
 	private String nome;
 	
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY,
-				cascade = {
-						CascadeType.PERSIST,
-						CascadeType.MERGE},
-						mappedBy = "categorias")
+	@JsonIgnore                                   //Consegui trazer esta solução, porem em StackOverflow é dito que ao usar o comando
+	@ManyToMany(fetch = FetchType.EAGER,          //'EAGER' é trago problemas de lentidão 
+				cascade = {CascadeType.ALL},
+				mappedBy = "categorias")
 	private Set<Produto> produtos = new HashSet<>();
 	
 	public Categoria() {

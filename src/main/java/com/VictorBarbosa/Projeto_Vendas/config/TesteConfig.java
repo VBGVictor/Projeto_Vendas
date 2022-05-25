@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.Categoria;
 import com.VictorBarbosa.Projeto_Vendas.entities.Pedido;
+import com.VictorBarbosa.Projeto_Vendas.entities.PedidoItem;
 import com.VictorBarbosa.Projeto_Vendas.entities.Produto;
 import com.VictorBarbosa.Projeto_Vendas.entities.User;
 import com.VictorBarbosa.Projeto_Vendas.entities.enums.StatusPedido;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.CategoriaRepositorio;
+import com.VictorBarbosa.Projeto_Vendas.repositorios.PedidoItemRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.PedidoRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.ProdutoRepositorio;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.UserRepositorio;
@@ -33,6 +35,9 @@ public class TesteConfig implements CommandLineRunner {
 	
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
+	
+	@Autowired
+	private PedidoItemRepositorio pedidoItemRepositorio;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -67,6 +72,13 @@ public class TesteConfig implements CommandLineRunner {
 		p5.getCategorias().add(cat2);
 		
 		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
+		
+		PedidoItem pi1 = new PedidoItem(pe1, p1, 2, p1.getPreco());
+		PedidoItem pi2 = new PedidoItem(pe1, p3, 1, p3.getPreco());
+		PedidoItem pi3 = new PedidoItem(pe2, p3, 2, p3.getPreco());
+		PedidoItem pi4 = new PedidoItem(pe3, p5, 2, p5.getPreco());
+		
+		pedidoItemRepositorio.saveAll(Arrays.asList(pi1, pi2, pi3, pi4));
 	}
 	
 }
