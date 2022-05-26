@@ -16,11 +16,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.enums.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
+@Table(name = "tb_pedido")
 public class Pedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -42,7 +44,7 @@ public class Pedido implements Serializable {
 	private User cliente;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER, mappedBy = "id.pedido")  //Este mapeamento não estava conseguindo relacionar com o 'id.pedidos' da classe
-	private Set<PedidoItem> Items = new HashSet<>();                                       //PeidoItemPK que se trata de uma classe que intermedia a relação, logo, tive que colocar
+	private Set<PedidoItem> items = new HashSet<>();                                       //PeidoItemPK que se trata de uma classe que intermedia a relação, logo, tive que colocar
 																						   //O comando 'EAGER' e 'CascadeType.ALL' para forçar e puxar a relação
 	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)  
 	private Pagamento pagamento;
@@ -91,7 +93,7 @@ public class Pedido implements Serializable {
 	}
 
 	public Set<PedidoItem> getItems() {
-		return Items;
+		return items;
 	}
 	
 	
@@ -102,6 +104,14 @@ public class Pedido implements Serializable {
 	public void setStatusPedido(StatusPedido statusPedido) {
 		if(statusPedido != null)
 		this.statusPedido = statusPedido.getCode();
+	}
+	
+	public Double getTotal() {
+		double sum = 0;
+		for (PedidoItem x : items) {
+			sum = sum + x.getSubTotal();
+		}
+		return sum;
 	}
 
 	@Override
