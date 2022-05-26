@@ -27,4 +27,8 @@ public class UserServico {
 	public User insert(User obj) {
 		return repositorio.save(obj);
 	}
+	
+	public void deletar(Long id) {
+		repositorio.deleteById(id);
+	}
 }
