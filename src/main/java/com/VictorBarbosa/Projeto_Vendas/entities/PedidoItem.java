@@ -17,7 +17,7 @@ public class PedidoItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
-	private PedidoItemPK id = new PedidoItemPK();
+	private PedidoItemPK id = new PedidoItemPK();      //A associação esta vinculada ao 'PedidoItemPK'
 	
 	private Integer quantidade;
 	private Double preco;

@@ -14,7 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "tb_produtos")
@@ -38,6 +41,9 @@ public class Produto implements Serializable {
 	@JoinTable(name = "tb_produto_categoria", joinColumns = {@JoinColumn(name = "produto_id")}, inverseJoinColumns = {@JoinColumn(name = "categoria_id")})
 	private Set<Categoria> categorias = new HashSet<>();// Para garantir que a coleção não comece valendo null
 
+	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER, mappedBy = "id.produto")
+	private Set<PedidoItem> items = new HashSet<>();
+	
 	public Produto() {
 	}
 
@@ -92,6 +98,15 @@ public class Produto implements Serializable {
 
 	public Set<Categoria> getCategorias() {
 		return categorias;
+	}
+	
+	@JsonIgnore                                     //Este JsonIgnore servirá para que quando um pedido for buscado apareça
+	public Set<Pedido> getPedidos() {               //Os produtos a ele associados 
+		Set<Pedido> set = new HashSet<>();
+		for (PedidoItem x : items) {
+			set.add(x.getPedido());
+		}
+		return set;
 	}
 
 	@Override
