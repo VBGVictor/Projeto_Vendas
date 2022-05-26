@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.enums.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -43,6 +44,8 @@ public class Pedido implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER, mappedBy = "id.pedido")  //Este mapeamento não estava conseguindo relacionar com o 'id.pedidos' da classe
 	private Set<PedidoItem> Items = new HashSet<>();                                       //PeidoItemPK que se trata de uma classe que intermedia a relação, logo, tive que colocar
 																						   //O comando 'EAGER' e 'CascadeType.ALL' para forçar e puxar a relação
+	@OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)  
+	private Pagamento pagamento;
 	
 	public Pedido() {
 	}
@@ -77,6 +80,14 @@ public class Pedido implements Serializable {
 
 	public void setCliente(User cliente) {
 		this.cliente = cliente;
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
 	}
 
 	public Set<PedidoItem> getItems() {

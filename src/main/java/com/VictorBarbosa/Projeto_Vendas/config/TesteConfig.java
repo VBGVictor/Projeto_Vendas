@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.Categoria;
+import com.VictorBarbosa.Projeto_Vendas.entities.Pagamento;
 import com.VictorBarbosa.Projeto_Vendas.entities.Pedido;
 import com.VictorBarbosa.Projeto_Vendas.entities.PedidoItem;
 import com.VictorBarbosa.Projeto_Vendas.entities.Produto;
@@ -64,6 +65,11 @@ public class TesteConfig implements CommandLineRunner {
 		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3));
 		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
+		Pagamento pag1 = new Pagamento(null, Instant.parse("2022-05-17T21:20:30Z"), pe1);
+		pe1.setPagamento(pag1);  //Quem salva em memoria não é o pagamento, mas sim o pedido
+		
+		pedidoRepositorio.save(pe1);                    //Este comando estava por último como execução, mas houve um erro. Assim colocando
+														//Ele após o acontecimento do pagamento e já registrando não houve erro de finalização da execução do programa
 		p1.getCategorias().add(cat2);
 		p2.getCategorias().add(cat1);
 		p2.getCategorias().add(cat3);
@@ -79,6 +85,7 @@ public class TesteConfig implements CommandLineRunner {
 		PedidoItem pi4 = new PedidoItem(pe3, p5, 2, p5.getPreco());
 		
 		pedidoItemRepositorio.saveAll(Arrays.asList(pi1, pi2, pi3, pi4));
+		
 	}
 	
 }
