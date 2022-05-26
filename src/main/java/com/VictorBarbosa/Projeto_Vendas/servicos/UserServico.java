@@ -23,4 +23,8 @@ public class UserServico {
 		Optional<User> obj = repositorio.findById(id);
 		return obj.get();
 	}
+	
+	public User insert(User obj) {
+		return repositorio.save(obj);
+	}
 }
