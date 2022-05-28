@@ -3,6 +3,8 @@ package com.VictorBarbosa.Projeto_Vendas.servicos;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -43,9 +45,13 @@ public class UserServico {
 	}
 	//não funcionou "org.hibernate.LazyInitializationException: could not initialize proxy.." aparece esta exceção quando tento fazer um update
 	public User update(Long id, User obj) {
+		try {
 		User entity = repositorio.getById(id); //Prepara o objeto no banco de dados para alguma alteração ao inves de traze-lo como o findById
 		updateData(entity, obj);
 		return repositorio.save(entity);
+		} catch (EntityNotFoundException e) {
+			throw new RecursosNaoEcontradoExcessao(id);
+		}
 	}
 
 	private void updateData(User entity, User obj) {
