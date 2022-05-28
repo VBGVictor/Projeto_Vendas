@@ -31,4 +31,17 @@ public class UserServico {
 	public void deletar(Long id) {
 		repositorio.deleteById(id);
 	}
+	//não funcionou "org.hibernate.LazyInitializationException: could not initialize proxy.." aparece esta exceção quando tento fazer um update
+	public User update(Long id, User obj) {
+		User entity = repositorio.getById(id); //Prepara o objeto no banco de dados para alguma alteração ao inves de traze-lo como o findById
+		updateData(entity, obj);
+		return repositorio.save(entity);
+	}
+
+	private void updateData(User entity, User obj) {
+		entity.setNome(obj.getNome());
+		entity.setEmail(obj.getEmail());
+		entity.setCelular(obj.getCelular());
+		
+	}
 }
