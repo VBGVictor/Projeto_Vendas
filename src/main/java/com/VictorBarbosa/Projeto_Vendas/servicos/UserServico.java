@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.VictorBarbosa.Projeto_Vendas.entities.User;
 import com.VictorBarbosa.Projeto_Vendas.repositorios.UserRepositorio;
+import com.VictorBarbosa.Projeto_Vendas.servicos.exceptions.RecursosNaoEcontradoExcessao;
 
 @Service//registra sua classe como um Serviço do Spring e vai poder ser injetado automaticamente
 public class UserServico {
@@ -21,7 +22,7 @@ public class UserServico {
 	
 	public User findById(Long id) {
 		Optional<User> obj = repositorio.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new RecursosNaoEcontradoExcessao(id));
 	}
 	
 	public User insert(User obj) {
